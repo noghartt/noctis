@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  phoenix:
+    container_name: "api"
+    build:
+      context: .
+      args:
+        - PORT=${PORT}
+    env_file: .env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+
+  postgres:
+    container_name: "postgres"
+    image: postgres:11-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+      - POSTGRESQL_DATABASE=${POSTGRES_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
