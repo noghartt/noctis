@@ -15,6 +15,18 @@ services:
     volumes:
       - .:/app
 
+  pgAdmin:
+    container_name: "pgAdmin"
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PWD}
+    depends_on:
+      - postgres
+    ports:
+      - ${PGADMIN_PORT}:80
+
   postgres:
     container_name: "postgres"
     image: postgres:11-alpine
