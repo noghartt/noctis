@@ -1,6 +1,6 @@
 defmodule NoctisWeb.GraphQL.Schema do
   use Absinthe.Schema
-  use Absinthe.Relay.Schema
+  use Absinthe.Relay.Schema, :modern
 
   import_types NoctisWeb.GraphQL.Types.Queries.{User}
 
@@ -13,5 +13,4 @@ defmodule NoctisWeb.GraphQL.Schema do
   mutation do
     import_fields :user_mutations
   end
-
 end
