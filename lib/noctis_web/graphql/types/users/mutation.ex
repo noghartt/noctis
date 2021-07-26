@@ -1,23 +1,20 @@
-defmodule NoctisWeb.GraphQL.Types.Mutations.User do
+defmodule NoctisWeb.GraphQL.Mutations.User do
   @moduledoc false
 
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
 
-  input_object :user_input do
-    field :name, non_null(:string)
-  end
+  alias NoctisWeb.Resolvers.User
 
   object :user_mutations do
+    field :create_user, type: :user do
+      arg :email, non_null(:string)
+      arg :password, non_null(:string)
+      arg :first_name, non_null(:string)
+      arg :last_name, :string
+      arg :cpf, non_null(:string)
 
-    @desc "Create or update an user"
-    field :upsert_user, :user do
-      arg :user, non_null(:user_input)
-
-      resolve fn _, %{user: %{name: name}}, _ ->
-        {:ok, %{id: 1, name: name }}
-      end
+      resolve &User.create_user/3
     end
-
   end
 end
