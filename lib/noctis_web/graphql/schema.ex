@@ -2,9 +2,9 @@ defmodule NoctisWeb.GraphQL.Schema do
   use Absinthe.Schema
   use Absinthe.Relay.Schema, :modern
 
-  import_types NoctisWeb.GraphQL.Types.Queries.{User}
-
-  import_types NoctisWeb.GraphQL.Types.Mutations.User
+  import_types NoctisWeb.GraphQL.Types.User
+  import_types NoctisWeb.GraphQL.Queries.User
+  import_types NoctisWeb.GraphQL.Mutations.User
 
   query do
     import_fields :user_queries
