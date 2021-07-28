@@ -17,7 +17,6 @@ defmodule Noctis.Users do
   schema "users" do
     field :email, :string
     field :password, :string
-    field :confirm_password, :string, virtual: true
     field :cpf, :string
     field :first_name, :string
     field :last_name, :string
