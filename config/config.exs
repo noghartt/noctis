@@ -18,6 +18,11 @@ config :noctis, NoctisWeb.Endpoint,
   pubsub_server: Noctis.PubSub,
   live_view: [signing_salt: "PL4vMrfz"]
 
+# Configure the Guardian authentication
+config :noctis, Noctis.Guardian,
+  issuer: "noctis",
+  secret_key: System.get_env("GUARDIAN_SECRET")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
