@@ -10,6 +10,15 @@ defmodule NoctisWeb.Resolvers.User do
     end
   end
 
+  def login(_root, %{email: email, password: password}, _resolution) do
+    case Users.authenticate(email, password) do
+      {:ok, token, _full_claims} ->
+        {:ok, token}
+      {:error, _} ->
+        {:error, [message: "Your email or password is wrong. Please, try again."]}
+    end
+  end
+
   defp format_error(changeset) do
     changeset.errors
     |> Enum.map(fn {field, {error, _details}} ->
