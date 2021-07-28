@@ -16,5 +16,12 @@ defmodule NoctisWeb.GraphQL.Mutations.User do
 
       resolve &User.create_user/3
     end
+
+    field :login, :string do
+      arg :email, non_null(:string)
+      arg :password, non_null(:string)
+
+      resolve &User.login/3
+    end
   end
 end

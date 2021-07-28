@@ -4,6 +4,7 @@ defmodule Noctis.Users do
   use Noctis.Schema
 
   import Ecto.Changeset
+  import Ecto.Query, only: [from: 2]
 
   alias Noctis.Repo
 
@@ -17,7 +18,6 @@ defmodule Noctis.Users do
   schema "users" do
     field :email, :string
     field :password, :string
-    field :confirm_password, :string, virtual: true
     field :cpf, :string
     field :first_name, :string
     field :last_name, :string
@@ -31,6 +31,25 @@ defmodule Noctis.Users do
     |> changeset(args)
     |> encrypt_password()
     |> Repo.insert_or_update()
+  end
+
+  def get_user!(id), do: Repo.get!(Noctis.Users, id)
+
+  def authenticate(email, password) do
+    query = from u in Noctis.Users, where: u.email == ^email
+
+    case Repo.one(query) do
+      nil ->
+        Bcrypt.no_user_verify()
+        {:error, :invalid_credentials}
+      user ->
+        if Bcrypt.verify_pass(password, user.password) do
+          user
+          |> Noctis.Guardian.encode_and_sign()
+        else
+          {:error, :invalid_credentials}
+        end
+    end
   end
 
   @doc false
