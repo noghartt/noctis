@@ -3,10 +3,12 @@ defmodule NoctisWeb.Resolvers.User do
 
   def create_user(_root, args, _resolution) do
     args
-    |> Users.create
+    |> Users.create()
     |> case do
-      {:ok, user} -> {:ok, user}
-      {:error, changeset} -> {:error, format_error(changeset)}
+      {:ok, user} ->
+        {:ok, user}
+      {:error, changeset} ->
+        {:error, format_error(changeset)}
     end
   end
 
