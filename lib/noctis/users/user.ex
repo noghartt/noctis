@@ -85,12 +85,12 @@ defmodule Noctis.Users do
     )
   end
 
-  defp encrypt_password(changeset) do
-    case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
-        changeset
-        |> put_change(:password, Bcrypt.hash_pwd_salt(password))
-      _ -> changeset
-    end
+  defp encrypt_password(%Ecto.Changeset{
+      valid?: true,
+      changes: %{password: password}
+    } = changeset
+  ) do
+    change(changeset, password: Bcrypt.hash_pwd_salt(password))
   end
+  defp encrypt_password(changeset), do: changeset
 end
