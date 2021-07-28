@@ -32,6 +32,8 @@ defmodule Noctis.Users do
     |> Repo.insert_or_update()
   end
 
+  def get_user!(id), do: Repo.get!(Noctis.Users, id)
+
   @doc false
   def changeset(%__MODULE__{} = user, attrs) do
     user
