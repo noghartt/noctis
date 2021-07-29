@@ -5,6 +5,10 @@ defmodule NoctisWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :graphql do
+    plug Noctis.Auth.Context
+  end
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
@@ -21,11 +25,15 @@ defmodule NoctisWeb.Router do
     end
   end
 
-  forward "/graphql", Absinthe.Plug, schema: NoctisWeb.GraphQL.Schema
+  scope "/api" do
+    pipe_through :graphql
 
-  if Mix.env() == :dev do
-    forward "/graphiql",
-      Absinthe.Plug.GraphiQL,
-      schema: NoctisWeb.GraphQL.Schema
+    if Mix.env() == :dev do
+      forward "/graphiql",
+        Absinthe.Plug.GraphiQL,
+        schema: NoctisWeb.GraphQL.Schema
+    end
+
+    forward "/graphql", Absinthe.Plug, schema: NoctisWeb.GraphQL.Schema
   end
 end

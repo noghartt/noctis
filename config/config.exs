@@ -18,6 +18,10 @@ config :noctis, NoctisWeb.Endpoint,
   pubsub_server: Noctis.PubSub,
   live_view: [signing_salt: "PL4vMrfz"]
 
+# Configure foreign key to Ecto repo
+config :noctis, Noctis.Repo,
+  migration_foreign_key: [column: :id, type: :uuid]
+
 # Configure the Guardian authentication
 config :noctis, Noctis.Guardian,
   issuer: "noctis",
