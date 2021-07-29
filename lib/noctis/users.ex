@@ -30,7 +30,7 @@ defmodule Noctis.Users do
     %__MODULE__{}
     |> changeset(args)
     |> encrypt_password()
-    |> Repo.insert_or_update()
+    |> Repo.insert()
   end
 
   def get_user!(id), do: Repo.get!(Noctis.Users, id)
