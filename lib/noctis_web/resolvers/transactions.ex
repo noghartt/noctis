@@ -1,8 +1,6 @@
 defmodule NoctisWeb.Resolvers.Transaction do
-  import Ecto.Query, only: [where: 2]
+  import Ecto.Query, only: [where: 2, from: 2]
   import Ecto.Changeset, only: [change: 2]
-
-  require Logger
 
   alias Noctis.{Users, UserTransactions, Repo, Transactions}
 
@@ -100,4 +98,22 @@ defmodule NoctisWeb.Resolvers.Transaction do
     end
   end
   def refund(_root, _args, _resolution), do: {:error, "Invalid authentication token"}
+
+  def get_transactions(_root, args, %{context: %{current_user: current_user}}) do
+
+    query = from t in UserTransactions,
+      where: t.sender_id == ^current_user.id
+        and t.inserted_at >= ^args.initial_date
+        and t.inserted_at <= ^args.end_date
+
+    transaction_ids = Repo.all(query) |> Enum.map(fn transaction ->
+      transaction.transaction_id
+    end)
+
+    transactions = from(t in Transactions, where: t.id in ^transaction_ids)
+      |> Repo.all()
+
+    {:ok, transactions}
+  end
+  def get_transactions(_root, _args, _resolution), do: {:error, "Invalid authentication token"}
 end
